@@ -2,7 +2,7 @@
 import fs from "fs";
 import path from "path";
 import inquirer, { Answers } from "inquirer";
-import { generateViteReact } from "./generate_vite_react";
+import { generateViteReact } from "./generate_vite_react.ts";
 
 // 可选框架与运行环境
 type Framework = "react" | "vue";
