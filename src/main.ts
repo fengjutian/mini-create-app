@@ -204,7 +204,43 @@ async function main() {
   const stateLibrary = answers.stateLibrary as StateLibrary;
   const uiLibrary = answers.uiLibrary as UILibrary;
 
-  const projectName = `${framework}-${runtime}-app`;
+  // 询问用户是否要自定义项目名称
+  const customNameAnswer = await inquirer.prompt([
+    {
+      type: "confirm",
+      name: "customName",
+      message: "是否要自定义项目名称？(默认将使用格式: 框架-运行时-app)",
+      default: false
+    }
+  ]);
+
+  let projectName = `${framework}-${runtime}-app`;
+  
+  // 如果用户选择自定义项目名称，则询问具体名称
+  if (customNameAnswer.customName) {
+    const nameAnswer = await inquirer.prompt([
+      {
+        type: "input",
+        name: "projectName",
+        message: "请输入项目名称: ",
+        default: projectName,
+        validate: function(value) {
+          // 简单验证项目名称格式
+          const pass = value.match(/^[a-zA-Z0-9-_]+$/);
+          if (pass) {
+            return true;
+          }
+          return "请输入有效的项目名称（只能包含字母、数字、连字符和下划线）";
+        }
+      }
+    ]);
+    
+    // 如果用户输入了名称，则使用用户输入的名称；否则使用默认名称
+    if (nameAnswer.projectName.trim()) {
+      projectName = nameAnswer.projectName.trim();
+    }
+  }
+
   fs.mkdirSync(projectName, { recursive: true });
 
   const projectPath = path.join(process.cwd(), projectName);
