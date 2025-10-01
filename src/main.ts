@@ -2,11 +2,11 @@
 import fs from "fs";
 import path from "path";
 import inquirer, { Answers } from "inquirer";
-import { generateViteReact } from "./generate_vite_react.ts";
-import { generateViteVue } from "./generate_vite_vue.ts";
-import { generateFresh } from './generate_fresh.ts'
-import { generateVueCDN } from "./generate_vue_CDN.ts";
-import { type Framework, type Runtime, type PackageManager, type ValidationLibrary, type ErrorHandlingLibrary, type TestingLibrary, type VueStateLibrary, type ReactStateLibrary, type StateLibrary, type ReactUILibrary, type VueUILibrary, type UILibrary } from "./types.ts";
+import { generateViteReact } from "./generate_vite_react";
+import { generateViteVue } from "./generate_vite_vue";
+import { generateFresh } from './generate_fresh'
+import { generateVueCDN } from "./generate_vue_CDN";
+import { type Framework, type Runtime, type PackageManager, type ValidationLibrary, type ErrorHandlingLibrary, type TestingLibrary, type VueStateLibrary, type ReactStateLibrary, type StateLibrary, type ReactUILibrary, type VueUILibrary, type UILibrary } from "./types";
 
 // 定义所有可选配置
 const frameworks: Framework[] = ["react", "vue3"];

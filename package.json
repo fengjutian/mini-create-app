@@ -1,6 +1,6 @@
 {
   "name": "mini-create-app",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A mini app generator with TypeScript support",
   "main": "dist/src/main.js",
   "bin": {
