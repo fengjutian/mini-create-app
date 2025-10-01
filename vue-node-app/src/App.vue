@@ -1,1 +1,0 @@
-<template><h1>Vue + Vite + TS</h1><HelloWorld msg="Hello Vue!"/></template><script setup lang="ts">import HelloWorld from './components/HelloWorld.vue'</script>
