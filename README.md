@@ -8,15 +8,15 @@
   <p>一站式配置多种框架、运行时、包管理器和功能库，提供直观的交互式选择体验</p>
 
   <p>
-    <a href="#features">✨ 特性</a>
+    <a href="#特性">✨ 特性</a>
     •
-    <a href="#quick-start">🚀 快速开始</a>
+    <a href="#安装">📦 安装</a>
     •
-    <a href="#usage">💡 使用指南</a>
+    <a href="#使用指南">💡 使用指南</a>
     •
-    <a href="#supported-technologies">🛠️ 支持的技术栈</a>
+    <a href="#支持的技术栈">🛠️ 支持的技术栈</a>
     •
-    <a href="#project-structure">📁 项目结构</a>
+    <a href="#项目结构">📁 项目结构</a>
   </p>
 </div>
 
@@ -37,45 +37,67 @@
   - UI 组件库：Material UI、Ant Design、Vuetify 等
 - **开箱即用**：自动生成完整项目结构和配置
 - **TypeScript 支持**：全项目使用 TypeScript 开发，提供完整类型定义
+- **全局安装支持**：可通过 npm i -g 全局安装使用
 
-## 🚀 快速开始
+## 📦 安装
 
-### 前提条件
-
-确保您的系统已安装以下软件：
-- Node.js (v16.0.0 或更高版本) 或其他支持的运行时
-- npm、pnpm、yarn 或 bun 中的任意一个包管理器
-
-### 安装依赖
+### 全局安装（推荐）
 
 ```bash
+npm install -g mini-create-app
+```
+
+安装完成后，您可以直接在命令行中使用 `mini-create-app` 命令。
+
+### 本地开发安装
+
+如果您想参与项目开发：
+
+```bash
+# 克隆仓库
+git clone <repository-url>
 cd mini-create-app
+
+# 安装依赖
 npm install
-```
 
-### 构建项目
-
-```bash
+# 构建项目
 npm run build
-```
 
-### 运行应用
-
-```bash
+# 本地运行
 npm start
-```
 
-或者在开发模式下运行：
-
-```bash
+# 开发模式运行
 npm run dev
 ```
 
 ## 💡 使用指南
 
-运行应用后，您将进入一个直观的交互式配置流程：
+### 全局安装后使用
 
-### 1. 选择创建方式
+直接在命令行中输入：
+
+```bash
+mini-create-app
+```
+
+或指定项目名称：
+
+```bash
+mini-create-app my-awesome-project
+```
+
+### 本地开发模式使用
+
+```bash
+npm start
+```
+
+### 创建流程
+
+运行工具后，您将进入直观的交互式配置流程：
+
+#### 1. 选择创建方式
 
 首先，您可以选择预设模板快速开始，或进行自定义配置：
 
@@ -83,17 +105,17 @@ npm run dev
 - **✨ 快速开始 (Vue3 + Node + Vite)**：一键创建配置完善的 Vue3 项目
 - **🛠️ 自定义配置**：完全自定义项目的各项配置
 
-### 2. 自定义配置流程
+#### 2. 自定义配置流程
 
 如果选择了自定义配置，您将通过以下步骤完成配置：
 
-#### 步骤 1: 选择核心配置
+##### 步骤 1: 选择核心配置
 
 - **🎨 选择框架**：React 或 Vue3
 - **⚙️ 选择运行环境**：Node.js、Bun 或 Deno
 - **📦 选择包管理器**：npm、pnpm、yarn 或 bun
 
-#### 步骤 2: 选择功能模块
+##### 步骤 2: 选择功能模块
 
 根据需要选择以下功能模块（可选择 'none' 跳过）：
 
@@ -103,7 +125,7 @@ npm run dev
 - **📊 全局状态管理库**：根据所选框架提供相应选项
 - **🎨 UI 组件库**：根据所选框架提供相应选项
 
-### 3. 确认配置
+#### 3. 确认配置
 
 配置完成后，系统将显示配置总结，您可以确认或取消创建：
 
@@ -122,7 +144,7 @@ npm run dev
 确认使用以上配置创建项目吗? (Y/n)
 ```
 
-### 4. 项目创建
+#### 4. 项目创建
 
 确认配置后，系统将自动生成项目结构并安装依赖。创建完成后，按照提示进入项目目录并启动开发服务器：
 
@@ -221,6 +243,7 @@ cd [project-name]
 mini-create-app/
 ├── .gitignore          # Git忽略配置
 ├── README.md           # 项目说明文档
+├── cli.js              # 命令行入口文件
 ├── dev.js              # 开发模式入口
 ├── package.json        # 项目配置和依赖
 ├── package-lock.json   # 依赖锁定文件
@@ -230,7 +253,8 @@ mini-create-app/
     ├── types.ts        # TypeScript类型定义
     ├── generate_vite_react.ts  # React项目生成逻辑
     ├── generate_vite_vue.ts    # Vue项目生成逻辑
-    └── generate_fresh.ts       # Deno Fresh项目生成逻辑
+    ├── generate_fresh.ts       # Deno Fresh项目生成逻辑
+    └── generate_vue_CDN.ts     # Vue CDN项目生成逻辑
 ```
 
 ## 🚧 开发和构建
