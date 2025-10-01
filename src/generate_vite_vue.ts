@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { type ValidationLibrary, type ErrorHandlingLibrary, type TestingLibrary, type VueStateLibrary, type VueUILibrary } from './types';
+import { type ValidationLibrary, type ErrorHandlingLibrary, type TestingLibrary, type VueStateLibrary, type VueUILibrary } from './types.js';
 
 export function generateViteVue(
   projectPath: string,

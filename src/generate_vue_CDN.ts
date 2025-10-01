@@ -1,6 +1,6 @@
-import * as fs from "fs";
+import fs from "node:fs";
 import * as path from "path";
-import { type ErrorHandlingLibrary, type TestingLibrary, type VueStateLibrary } from "./types";
+import { type ErrorHandlingLibrary, type TestingLibrary, type VueStateLibrary } from "./types.js";
 
 export function generateVueCDN(
   projectPath: string,

@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { type ValidationLibrary, type ErrorHandlingLibrary, type TestingLibrary, type ReactStateLibrary, type ReactUILibrary } from "./types";
+import { type ValidationLibrary, type ErrorHandlingLibrary, type TestingLibrary, type ReactStateLibrary, type ReactUILibrary } from "./types.js";
 export function generateViteReact(projectPath: string, validationLibrary: ValidationLibrary, errorHandlingLibrary: ErrorHandlingLibrary, testingLibrary: TestingLibrary, stateLibrary: ReactStateLibrary, uiLibrary: ReactUILibrary) {
   // create folders
   fs.mkdirSync(path.join(projectPath, "src/components"), { recursive: true });

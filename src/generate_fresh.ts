@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { type ErrorHandlingLibrary, type TestingLibrary, type StateLibrary } from "./types";
+import { type ErrorHandlingLibrary, type TestingLibrary, type StateLibrary } from "./types.js";
 
 export function generateFresh(projectPath: string, errorHandlingLibrary: ErrorHandlingLibrary, testingLibrary: TestingLibrary, stateLibrary: StateLibrary) {
   fs.mkdirSync(path.join(projectPath, "routes"), { recursive: true });
