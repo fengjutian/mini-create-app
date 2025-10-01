@@ -3,3 +3,7 @@ export type Runtime = "node" | "bun" | "deno"
 export type PackageManager = "npm" | "pnpm" | "yarn" | "bun";
 export type ValidationLibrary = "zod" | "yup" | "io-ts" | "superstruct" | "valibot" | "runtypes" | "none";
 export type ErrorHandlingLibrary = "neverthrow" | "ts-results" | "oxide.ts" | "true-myth" | "purify-ts" | "fp-ts" | "none";
+export type TestingLibrary = "jest" | "vitest" | "cypress" | "playwright" | "puppeteer" | "react-testing-library" | "none";
+export type VueStateLibrary = "pinia" | "valtio" | "nanostores" | "mobx" | "redux-toolkit-query" | "none";
+export type ReactStateLibrary = "redux" | "zustand" | "recoil" | "jotai" | "mobx" | "valtio" | "nanostores" | "redux-toolkit-query" | "none";
+export type StateLibrary = VueStateLibrary | ReactStateLibrary;

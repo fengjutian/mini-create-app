@@ -5,14 +5,17 @@ import inquirer, { Answers } from "inquirer";
 import { generateViteReact } from "./generate_vite_react.ts";
 import { generateViteVue } from "./generate_vite_vue.ts";
 import { generateFresh } from './generate_fresh.ts'
-import { generateVueCDN } from "./generate_vue_CDN.ts";
-import { type Framework, type Runtime, type PackageManager, type ValidationLibrary, type ErrorHandlingLibrary } from "./types.ts";
+// import { generateVueCDN } from "./generate_vue_CDN.ts";
+import { type Framework, type Runtime, type PackageManager, type ValidationLibrary, type ErrorHandlingLibrary, type TestingLibrary, type VueStateLibrary, type ReactStateLibrary, type StateLibrary } from "./types.ts";
 
 const frameworks: Framework[] = ["react", "vue3"];
 const runtimes: Runtime[] = ["node", "bun", "deno"];
 const packageManagers: PackageManager[] = ["npm", "pnpm", "yarn", "bun"];
 const validationLibraries: ValidationLibrary[] = ["zod", "yup", "io-ts", "superstruct", "valibot", "runtypes", "none"];
 const errorHandlingLibraries: ErrorHandlingLibrary[] = ["neverthrow", "ts-results", "oxide.ts", "true-myth", "purify-ts", "fp-ts", "none"];
+const testingLibraries: TestingLibrary[] = ["jest", "vitest", "cypress", "playwright", "puppeteer", "react-testing-library", "none"];
+const vueStateLibraries: VueStateLibrary[] = ["pinia", "valtio", "nanostores", "mobx", "redux-toolkit-query", "none"];
+const reactStateLibraries: ReactStateLibrary[] = ["redux", "zustand", "recoil", "jotai", "mobx", "valtio", "nanostores", "redux-toolkit-query", "none"];
 
 async function main() {
   const answers: Answers = await inquirer.prompt([
@@ -46,6 +49,27 @@ async function main() {
       message: "选择异常处理库:",
       choices: errorHandlingLibraries,
     },
+    {
+      type: "list",
+      name: "testingLibrary",
+      message: "选择测试库:",
+      choices: testingLibraries,
+    },
+    {
+      type: "list",
+      name: "stateLibrary",
+      message: "选择全局状态管理库:",
+      choices: function(answers) {
+        if (answers.framework === "vue3") {
+          return vueStateLibraries;
+        } else {
+          return reactStateLibraries;
+        }
+      },
+      when: function() {
+        return true;
+      }
+    },
   ]);
 
   const framework = answers.framework as Framework;
@@ -53,6 +77,8 @@ async function main() {
   const pkgManager = answers.pkgManager as PackageManager;
   const validationLibrary = answers.validationLibrary as ValidationLibrary;
   const errorHandlingLibrary = answers.errorHandlingLibrary as ErrorHandlingLibrary;
+  const testingLibrary = answers.testingLibrary as TestingLibrary;
+  const stateLibrary = answers.stateLibrary as StateLibrary;
 
   const projectName = `${framework}-${runtime}-app`;
   fs.mkdirSync(projectName, { recursive: true });
@@ -62,20 +88,20 @@ async function main() {
   // 根据选择生成不同模板
   if (runtime === "node" || runtime === "bun") {
     if (framework === "react") {
-      generateViteReact(projectPath, validationLibrary, errorHandlingLibrary);
+      generateViteReact(projectPath, validationLibrary, errorHandlingLibrary, testingLibrary, stateLibrary as ReactStateLibrary);
     } else {
-      generateViteVue(projectPath, validationLibrary, errorHandlingLibrary);
+      generateViteVue(projectPath, validationLibrary, errorHandlingLibrary, testingLibrary, stateLibrary as VueStateLibrary);
     }
   } else if (runtime === "deno") {
     if (framework === "react") {
-      generateFresh(projectPath, errorHandlingLibrary);
+      generateFresh(projectPath, errorHandlingLibrary, testingLibrary, stateLibrary);
     } else {
-      generateVueCDN(projectPath, errorHandlingLibrary);
+      // generateVueCDN(projectPath, errorHandlingLibrary, testingLibrary, stateLibrary as VueStateLibrary);
     }
   }
 
   // 生成 README
-  generateReadme(projectPath, framework, runtime, pkgManager, validationLibrary, errorHandlingLibrary);
+  generateReadme(projectPath, framework, runtime, pkgManager, validationLibrary, errorHandlingLibrary, testingLibrary, stateLibrary);
 
   console.log(`\n项目已生成: ${projectName}`);
   console.log(`\n接下来运行:`);
@@ -98,7 +124,7 @@ async function main() {
   }
 }
 
-function generateReadme(projectPath: string, framework: Framework, runtime: Runtime, pkgManager: PackageManager, validationLibrary: ValidationLibrary, errorHandlingLibrary: ErrorHandlingLibrary) {
+function generateReadme(projectPath: string, framework: Framework, runtime: Runtime, pkgManager: PackageManager, validationLibrary: ValidationLibrary, errorHandlingLibrary: ErrorHandlingLibrary, testingLibrary: TestingLibrary, stateLibrary: string) {
   const cmds = {
     npm: { install: "npm install", dev: "npm run dev" },
     pnpm: { install: "pnpm install", dev: "pnpm dev" },
@@ -124,6 +150,22 @@ function generateReadme(projectPath: string, framework: Framework, runtime: Runt
   } else if (errorHandlingLibrary === "fp-ts") {
     features.push("fp-ts 异常处理");
   }
+  if (testingLibrary === "jest") {
+    features.push("Jest 测试框架");
+  } else if (testingLibrary === "vitest") {
+    features.push("Vitest 测试框架");
+  } else if (testingLibrary === "cypress") {
+    features.push("Cypress 端到端测试");
+  } else if (testingLibrary === "playwright") {
+    features.push("Playwright 端到端测试");
+  } else if (testingLibrary === "puppeteer") {
+    features.push("Puppeteer 自动化测试");
+  } else if (testingLibrary === "react-testing-library") {
+      features.push("✅ 使用 React Testing Library 进行组件测试");
+    }
+    if (stateLibrary !== "none") {
+      features.push(`✅ 使用 ${stateLibrary} 进行全局状态管理`);
+    }
   
   fs.writeFileSync(
     path.join(projectPath, "README.md"),
