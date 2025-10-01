@@ -128,6 +128,32 @@ async function main() {
     const featureAnswers = await inquirer.prompt([
       {
         type: "list",
+        name: "uiLibrary",
+        message: "🎨 选择UI库:",
+        choices: function() {
+          if (answers.framework === "vue3") {
+            return vueUILibraries;
+          } else {
+            return reactUILibraries;
+          }
+        },
+        default: "none"
+      },
+      {
+        type: "list",
+        name: "stateLibrary",
+        message: "📊 选择全局状态管理库:",
+        choices: function() {
+          if (answers.framework === "vue3") {
+            return vueStateLibraries;
+          } else {
+            return reactStateLibraries;
+          }
+        },
+        default: "none"
+      },
+      {
+        type: "list",
         name: "validationLibrary",
         message: "🔍 选择验证库:",
         choices: validationLibraries,
@@ -147,32 +173,8 @@ async function main() {
         choices: testingLibraries,
         default: "none"
       },
-      {
-        type: "list",
-        name: "stateLibrary",
-        message: "📊 选择全局状态管理库:",
-        choices: function() {
-          if (answers.framework === "vue3") {
-            return vueStateLibraries;
-          } else {
-            return reactStateLibraries;
-          }
-        },
-        default: "none"
-      },
-      {
-        type: "list",
-        name: "uiLibrary",
-        message: "🎨 选择UI库:",
-        choices: function() {
-          if (answers.framework === "vue3") {
-            return vueUILibraries;
-          } else {
-            return reactUILibraries;
-          }
-        },
-        default: "none"
-      },
+
+
     ]);
 
     answers = { ...answers, ...featureAnswers };
