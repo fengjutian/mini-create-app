@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
-import { type ValidationLibrary } from "./types.ts";
-export function generateViteReact(projectPath: string, validationLibrary: ValidationLibrary) {
+import { type ValidationLibrary, type ErrorHandlingLibrary } from "./types.ts";
+export function generateViteReact(projectPath: string, validationLibrary: ValidationLibrary, errorHandlingLibrary: ErrorHandlingLibrary) {
   // create folders
   fs.mkdirSync(path.join(projectPath, "src/components"), { recursive: true });
   fs.mkdirSync(path.join(projectPath, "src/routes"), { recursive: true });
@@ -28,7 +28,13 @@ export function generateViteReact(projectPath: string, validationLibrary: Valida
       ...(validationLibrary === "io-ts" ? { "io-ts": "^2.2.20" } : {}),
       ...(validationLibrary === "superstruct" ? { "superstruct": "^1.0.3" } : {}),
       ...(validationLibrary === "valibot" ? { "valibot": "^0.28.0" } : {}),
-      ...(validationLibrary === "runtypes" ? { "runtypes": "^6.7.0" } : {})
+      ...(validationLibrary === "runtypes" ? { "runtypes": "^6.7.0" } : {}),
+      ...(errorHandlingLibrary === "neverthrow" ? { "neverthrow": "^6.0.0" } : {}),
+      ...(errorHandlingLibrary === "ts-results" ? { "ts-results": "^3.3.0" } : {}),
+      ...(errorHandlingLibrary === "oxide.ts" ? { "oxide.ts": "^1.0.0" } : {}),
+      ...(errorHandlingLibrary === "true-myth" ? { "true-myth": "^6.1.0" } : {}),
+      ...(errorHandlingLibrary === "purify-ts" ? { "purify-ts": "^1.4.0" } : {}),
+      ...(errorHandlingLibrary === "fp-ts" ? { "fp-ts": "^2.16.0" } : {})
     },
     devDependencies: {
       vite: "^4.0.0",

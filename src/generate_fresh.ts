@@ -1,18 +1,29 @@
 import fs from "fs";
 import path from "path";
+import { type ErrorHandlingLibrary } from "./types.ts";
 
-export function generateFresh(projectPath: string) {
+export function generateFresh(projectPath: string, errorHandlingLibrary: ErrorHandlingLibrary) {
   fs.mkdirSync(path.join(projectPath, "routes"), { recursive: true });
   fs.mkdirSync(path.join(projectPath, "islands"), { recursive: true });
   fs.mkdirSync(path.join(projectPath, "components"), { recursive: true });
-  fs.writeFileSync(
-    path.join(projectPath, "deno.json"),
-    JSON.stringify(
-      { tasks: { start: "deno run -A dev.ts" } },
-      null,
-      2
-    )
-  );
+  const imports: Record<string, string> = {};
+    if (errorHandlingLibrary === "neverthrow") {
+      imports["neverthrow/"] = "https://deno.land/x/neverthrow@v6.0.0/";
+    } else if (errorHandlingLibrary === "fp-ts") {
+      imports["fp-ts/"] = "https://deno.land/x/fp_ts@v2.16.0/";
+    }
+    
+    fs.writeFileSync(
+      path.join(projectPath, "deno.json"),
+      JSON.stringify(
+        { 
+          tasks: { start: "deno run -A dev.ts" },
+          imports: Object.keys(imports).length > 0 ? imports : undefined
+        },
+        null,
+        2
+      )
+    );
   fs.writeFileSync(path.join(projectPath, "dev.ts"), `import dev from "$fresh/dev.ts"; import config from "./fresh.config.ts"; await dev(import.meta.url, './main.ts', config);`);
   fs.writeFileSync(path.join(projectPath, "main.ts"), `import { start } from "$fresh/server.ts"; import manifest from "./fresh.gen.ts"; start(manifest);`);
   fs.writeFileSync(path.join(projectPath, "fresh.config.ts"), `export default {};`);

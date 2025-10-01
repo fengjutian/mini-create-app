@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
-import { type ValidationLibrary } from "./types.ts";
+import { type ValidationLibrary, type ErrorHandlingLibrary } from "./types.ts";
 
-export function generateViteVue(projectPath: string, validationLibrary: ValidationLibrary) {
+export function generateViteVue(projectPath: string, validationLibrary: ValidationLibrary, errorHandlingLibrary: ErrorHandlingLibrary) {
   fs.mkdirSync(path.join(projectPath, "src/components"), { recursive: true });
   fs.writeFileSync(
     path.join(projectPath, "package.json"),
@@ -17,14 +17,20 @@ export function generateViteVue(projectPath: string, validationLibrary: Validati
           typecheck: "vue-tsc --noEmit" // 添加类型检查脚本
         },
         dependencies: {
-          vue: "^3.2.0",
-          ...(validationLibrary === "zod" ? { "zod": "^3.22.0" } : {}),
-          ...(validationLibrary === "yup" ? { "yup": "^1.2.0" } : {}),
-          ...(validationLibrary === "io-ts" ? { "io-ts": "^2.2.20" } : {}),
-          ...(validationLibrary === "superstruct" ? { "superstruct": "^1.0.3" } : {}),
-          ...(validationLibrary === "valibot" ? { "valibot": "^0.28.0" } : {}),
-          ...(validationLibrary === "runtypes" ? { "runtypes": "^6.7.0" } : {})
-        },
+            vue: "^3.2.0",
+            ...(validationLibrary === "zod" ? { "zod": "^3.22.0" } : {}),
+            ...(validationLibrary === "yup" ? { "yup": "^1.2.0" } : {}),
+            ...(validationLibrary === "io-ts" ? { "io-ts": "^2.2.20" } : {}),
+            ...(validationLibrary === "superstruct" ? { "superstruct": "^1.0.3" } : {}),
+            ...(validationLibrary === "valibot" ? { "valibot": "^0.28.0" } : {}),
+            ...(validationLibrary === "runtypes" ? { "runtypes": "^6.7.0" } : {}),
+            ...(errorHandlingLibrary === "neverthrow" ? { "neverthrow": "^6.0.0" } : {}),
+            ...(errorHandlingLibrary === "ts-results" ? { "ts-results": "^3.3.0" } : {}),
+            ...(errorHandlingLibrary === "oxide.ts" ? { "oxide.ts": "^1.0.0" } : {}),
+            ...(errorHandlingLibrary === "true-myth" ? { "true-myth": "^6.1.0" } : {}),
+            ...(errorHandlingLibrary === "purify-ts" ? { "purify-ts": "^1.4.0" } : {}),
+            ...(errorHandlingLibrary === "fp-ts" ? { "fp-ts": "^2.16.0" } : {})
+          },
         devDependencies: {
           vite: "^4.0.0",
           typescript: "^5.0.0",
