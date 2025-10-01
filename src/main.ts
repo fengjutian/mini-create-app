@@ -11,10 +11,12 @@ import { generateVueCDN } from "./generate_vue_CDN.ts";
 type Framework = "react" | "vue3";
 type Runtime = "node" | "bun" | "deno"
 type PackageManager = "npm" | "pnpm" | "yarn" | "bun";
+type ValidationLibrary = "zod" | "none";
 
 const frameworks: Framework[] = ["react", "vue3"];
 const runtimes: Runtime[] = ["node", "bun", "deno"];
 const packageManagers: PackageManager[] = ["npm", "pnpm", "yarn", "bun"];
+const validationLibraries: ValidationLibrary[] = ["zod", "none"];
 
 async function main() {
   const answers: Answers = await inquirer.prompt([
@@ -36,11 +38,18 @@ async function main() {
       message: "选择包管理器:",
       choices: packageManagers,
     },
+    {
+      type: "list",
+      name: "validationLibrary",
+      message: "选择验证库:",
+      choices: validationLibraries,
+    },
   ]);
 
   const framework = answers.framework as Framework;
   const runtime = answers.runtime as Runtime;
   const pkgManager = answers.pkgManager as PackageManager;
+  const validationLibrary = answers.validationLibrary as ValidationLibrary;
 
   const projectName = `${framework}-${runtime}-app`;
   fs.mkdirSync(projectName, { recursive: true });
@@ -50,9 +59,9 @@ async function main() {
   // 根据选择生成不同模板
   if (runtime === "node" || runtime === "bun") {
     if (framework === "react") {
-      generateViteReact(projectPath);
+      generateViteReact(projectPath, validationLibrary);
     } else {
-      generateViteVue(projectPath);
+      generateViteVue(projectPath, validationLibrary);
     }
   } else if (runtime === "deno") {
     if (framework === "react") {
@@ -63,7 +72,7 @@ async function main() {
   }
 
   // 生成 README
-  generateReadme(projectPath, framework, runtime, pkgManager);
+  generateReadme(projectPath, framework, runtime, pkgManager, validationLibrary);
 
   console.log(`\n项目已生成: ${projectName}`);
   console.log(`\n接下来运行:`);
@@ -86,7 +95,7 @@ async function main() {
   }
 }
 
-function generateReadme(projectPath: string, framework: Framework, runtime: Runtime, pkgManager: PackageManager) {
+function generateReadme(projectPath: string, framework: Framework, runtime: Runtime, pkgManager: PackageManager, validationLibrary: ValidationLibrary) {
   const cmds = {
     npm: { install: "npm install", dev: "npm run dev" },
     pnpm: { install: "pnpm install", dev: "pnpm dev" },
@@ -95,9 +104,14 @@ function generateReadme(projectPath: string, framework: Framework, runtime: Runt
   };
 
   const chosen = cmds[pkgManager];
+  const features = ["基本项目结构"];
+  if (validationLibrary === "zod") {
+    features.push("Zod 数据验证");
+  }
+  
   fs.writeFileSync(
     path.join(projectPath, "README.md"),
-    `# ${framework} + ${runtime} Starter\n\n## 开发\n\n\n\`${chosen.install}\`\n\n然后运行:\n\n\`${chosen.dev}\``
+    `# ${framework} + ${runtime} Starter\n\n## 特性\n\n${features.map(feature => `- ${feature}`).join('\n')}\n\n## 开发\n\n\`${chosen.install}\`\n\n然后运行:\n\n\`${chosen.dev}\``
   );
 }
 

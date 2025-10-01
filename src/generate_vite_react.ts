@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-export function generateViteReact(projectPath: string) {
+export function generateViteReact(projectPath: string, validationLibrary: "zod" | "none") {
   // create folders
   fs.mkdirSync(path.join(projectPath, "src/components"), { recursive: true });
   fs.mkdirSync(path.join(projectPath, "src/routes"), { recursive: true });
@@ -21,7 +21,8 @@ export function generateViteReact(projectPath: string) {
       react: "^18.2.0",
       "react-dom": "^18.2.0",
       "react-router-dom": "^6.9.0",
-      zustand: "^4.1.0"
+      zustand: "^4.1.0",
+      ...(validationLibrary === "zod" ? { "zod": "^3.22.0" } : {})
     },
     devDependencies: {
       vite: "^4.0.0",
@@ -202,4 +203,116 @@ export const useCounter = create<CounterState>((set) => ({
   increment: () => set((s) => ({ count: s.count + 1 })),
 }));`
   );
+
+  // 添加 Zod 验证示例代码
+  if (validationLibrary === "zod") {
+    // 创建 validation 目录
+    fs.mkdirSync(path.join(projectPath, "src/validation"), { recursive: true });
+    
+    // 创建示例验证模式文件
+    fs.writeFileSync(
+      path.join(projectPath, "src/validation/userSchema.ts"),
+      `import { z } from 'zod';
+
+// 用户数据验证模式
+export const userSchema = z.object({
+  name: z.string().min(2, { message: "姓名至少需要2个字符" }),
+  email: z.string().email({ message: "请输入有效的邮箱地址" }),
+  age: z.number().min(18, { message: "年龄必须大于或等于18岁" }),
+});
+
+export type User = z.infer<typeof userSchema>;`
+    );
+    
+    // 修改 Home 组件以使用 Zod 验证
+    const originalHomeContent = `import Hello from '../components/Hello';
+import { useCounter } from '../stores/useCounter';
+
+import React, { useState } from 'react';
+import { userSchema } from '../validation/userSchema';
+
+export default function Home() {
+  const { count, increment } = useCounter();
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    age: ''
+  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      // 验证表单数据
+      userSchema.parse({
+        ...formData,
+        age: parseInt(formData.age)
+      });
+      setErrors({});
+      alert('表单验证成功!');
+    } catch (error: any) {
+      // 处理验证错误
+      const newErrors: Record<string, string> = {};
+      if (error.errors) {
+        error.errors.forEach((err: any) => {
+          newErrors[err.path[0]] = err.message;
+        });
+      }
+      setErrors(newErrors);
+    }
+  };
+
+  return (
+    <div>
+      <h1>Home Page</h1>
+      <Hello />
+      <p>Counter: {count}</p>
+      <button onClick={increment}>+1</button>
+      
+      <div style={{ marginTop: '20px', padding: '10px', border: '1px solid #ddd' }}>
+        <h2>Zod 表单验证示例</h2>
+        <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: '10px' }}>
+            <label>姓名:</label>
+            <input
+              type="text"
+              value={formData.name}
+              onChange={(e) => setFormData({...formData, name: e.target.value})}
+              style={{ marginLeft: '10px', padding: '5px' }}
+            />
+            {errors.name && <p style={{ color: 'red', margin: '5px 0 0 70px' }}>{errors.name}</p>}
+          </div>
+          <div style={{ marginBottom: '10px' }}>
+            <label>邮箱:</label>
+            <input
+              type="email"
+              value={formData.email}
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              style={{ marginLeft: '10px', padding: '5px' }}
+            />
+            {errors.email && <p style={{ color: 'red', margin: '5px 0 0 70px' }}>{errors.email}</p>}
+          </div>
+          <div style={{ marginBottom: '10px' }}>
+            <label>年龄:</label>
+            <input
+              type="number"
+              value={formData.age}
+              onChange={(e) => setFormData({...formData, age: e.target.value})}
+              style={{ marginLeft: '10px', padding: '5px' }}
+            />
+            {errors.age && <p style={{ color: 'red', margin: '5px 0 0 70px' }}>{errors.age}</p>}
+          </div>
+          <button type="submit" style={{ padding: '8px 16px' }}>提交</button>
+        </form>
+      </div>
+    </div>
+  );
+}`;
+    
+    fs.writeFileSync(
+      path.join(projectPath, "src/routes/Home.tsx"),
+      originalHomeContent
+    );
+  }
 }
