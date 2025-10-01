@@ -22,43 +22,43 @@ async function main() {
     {
       type: "list",
       name: "framework",
-      message: "选择框架:",
+      message: "🎨 选择框架:",
       choices: frameworks,
     },
     {
       type: "list",
       name: "runtime",
-      message: "选择运行环境:",
+      message: "⚙️ 选择运行环境:",
       choices: runtimes,
     },
     {
       type: "list",
       name: "pkgManager",
-      message: "选择包管理器:",
+      message: "📦 选择包管理器:",
       choices: packageManagers,
     },
     {
       type: "list",
       name: "validationLibrary",
-      message: "选择验证库:",
+      message: "🔍 选择验证库:",
       choices: validationLibraries,
     },
     {
       type: "list",
       name: "errorHandlingLibrary",
-      message: "选择异常处理库:",
+      message: "🛡️ 选择异常处理库:",
       choices: errorHandlingLibraries,
     },
     {
       type: "list",
       name: "testingLibrary",
-      message: "选择测试库:",
+      message: "🧪 选择测试库:",
       choices: testingLibraries,
     },
     {
       type: "list",
       name: "stateLibrary",
-      message: "选择全局状态管理库:",
+      message: "📊 选择全局状态管理库:",
       choices: function(answers) {
         if (answers.framework === "vue3") {
           return vueStateLibraries;
@@ -103,8 +103,8 @@ async function main() {
   // 生成 README
   generateReadme(projectPath, framework, runtime, pkgManager, validationLibrary, errorHandlingLibrary, testingLibrary, stateLibrary);
 
-  console.log(`\n项目已生成: ${projectName}`);
-  console.log(`\n接下来运行:`);
+  console.log(`\n✅ 项目已生成: ${projectName}`);
+  console.log(`\n🚀 接下来运行:`);
   if (pkgManager === "npm") {
     console.log(`  cd ${projectName}`);
     console.log(`  npm install`);
@@ -133,43 +133,53 @@ function generateReadme(projectPath: string, framework: Framework, runtime: Runt
   };
 
   const chosen = cmds[pkgManager];
-  const features = ["基本项目结构"];
+  const features = ["🏗️ 基本项目结构"];
   if (validationLibrary === "zod") {
-    features.push("Zod 数据验证");
+    features.push("🔍 Zod 数据验证");
+  } else if (validationLibrary === "yup") {
+    features.push("🔍 Yup 数据验证");
+  } else if (validationLibrary === "io-ts") {
+    features.push("🔍 io-ts 数据验证");
+  } else if (validationLibrary === "superstruct") {
+    features.push("🔍 superstruct 数据验证");
+  } else if (validationLibrary === "valibot") {
+    features.push("🔍 valibot 数据验证");
+  } else if (validationLibrary === "runtypes") {
+    features.push("🔍 runtypes 数据验证");
   }
   if (errorHandlingLibrary === "neverthrow") {
-    features.push("Neverthrow 异常处理");
+    features.push("🛡️ Neverthrow 异常处理");
   } else if (errorHandlingLibrary === "ts-results") {
-    features.push("ts-results 异常处理");
+    features.push("🛡️ ts-results 异常处理");
   } else if (errorHandlingLibrary === "oxide.ts") {
-    features.push("oxide.ts 异常处理");
+    features.push("🛡️ oxide.ts 异常处理");
   } else if (errorHandlingLibrary === "true-myth") {
-    features.push("true-myth 异常处理");
+    features.push("🛡️ true-myth 异常处理");
   } else if (errorHandlingLibrary === "purify-ts") {
-    features.push("purify-ts 异常处理");
+    features.push("🛡️ purify-ts 异常处理");
   } else if (errorHandlingLibrary === "fp-ts") {
-    features.push("fp-ts 异常处理");
+    features.push("🛡️ fp-ts 异常处理");
   }
   if (testingLibrary === "jest") {
-    features.push("Jest 测试框架");
+    features.push("🧪 Jest 测试框架");
   } else if (testingLibrary === "vitest") {
-    features.push("Vitest 测试框架");
+    features.push("🧪 Vitest 测试框架");
   } else if (testingLibrary === "cypress") {
-    features.push("Cypress 端到端测试");
+    features.push("🧪 Cypress 端到端测试");
   } else if (testingLibrary === "playwright") {
-    features.push("Playwright 端到端测试");
+    features.push("🧪 Playwright 端到端测试");
   } else if (testingLibrary === "puppeteer") {
-    features.push("Puppeteer 自动化测试");
+    features.push("🧪 Puppeteer 自动化测试");
   } else if (testingLibrary === "react-testing-library") {
-      features.push("✅ 使用 React Testing Library 进行组件测试");
+      features.push("🧪 使用 React Testing Library 进行组件测试");
     }
     if (stateLibrary !== "none") {
-      features.push(`✅ 使用 ${stateLibrary} 进行全局状态管理`);
+      features.push(`📊 使用 ${stateLibrary} 进行全局状态管理`);
     }
   
   fs.writeFileSync(
     path.join(projectPath, "README.md"),
-    `# ${framework} + ${runtime} Starter\n\n## 特性\n\n${features.map(feature => `- ${feature}`).join('\n')}\n\n## 开发\n\n\`${chosen.install}\`\n\n然后运行:\n\n\`${chosen.dev}\``
+    `# ${framework} + ${runtime} Starter 🚀\n\n## 特性\n\n${features.map(feature => `- ${feature}`).join('\n')}\n\n## 开发\n\n\`${chosen.install}\`\n\n然后运行:\n\n\`${chosen.dev}\``
   );
 }
 
