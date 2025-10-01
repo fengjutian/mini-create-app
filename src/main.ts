@@ -5,7 +5,7 @@ import inquirer, { Answers } from "inquirer";
 import { generateViteReact } from "./generate_vite_react.ts";
 import { generateViteVue } from "./generate_vite_vue.ts";
 import { generateFresh } from './generate_fresh.ts'
-// import { generateVueCDN } from "./generate_vue_CDN.ts";
+import { generateVueCDN } from "./generate_vue_CDN.ts";
 import { type Framework, type Runtime, type PackageManager, type ValidationLibrary, type ErrorHandlingLibrary, type TestingLibrary, type VueStateLibrary, type ReactStateLibrary, type StateLibrary, type ReactUILibrary, type VueUILibrary, type UILibrary } from "./types.ts";
 
 // 定义所有可选配置
@@ -222,7 +222,7 @@ async function main() {
     if (framework === "react") {
       generateFresh(projectPath, errorHandlingLibrary, testingLibrary, stateLibrary);
     } else {
-      // generateVueCDN(projectPath, errorHandlingLibrary, testingLibrary, stateLibrary as VueStateLibrary);
+      generateVueCDN(projectPath, errorHandlingLibrary, testingLibrary, stateLibrary as VueStateLibrary);
     }
   }
 
