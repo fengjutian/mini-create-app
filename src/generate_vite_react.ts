@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
-export function generateViteReact(projectPath: string, validationLibrary: "zod" | "none") {
+import { type ValidationLibrary } from "./types.ts";
+export function generateViteReact(projectPath: string, validationLibrary: ValidationLibrary) {
   // create folders
   fs.mkdirSync(path.join(projectPath, "src/components"), { recursive: true });
   fs.mkdirSync(path.join(projectPath, "src/routes"), { recursive: true });
@@ -22,7 +23,12 @@ export function generateViteReact(projectPath: string, validationLibrary: "zod" 
       "react-dom": "^18.2.0",
       "react-router-dom": "^6.9.0",
       zustand: "^4.1.0",
-      ...(validationLibrary === "zod" ? { "zod": "^3.22.0" } : {})
+      ...(validationLibrary === "zod" ? { "zod": "^3.22.0" } : {}),
+      ...(validationLibrary === "yup" ? { "yup": "^1.2.0" } : {}),
+      ...(validationLibrary === "io-ts" ? { "io-ts": "^2.2.20" } : {}),
+      ...(validationLibrary === "superstruct" ? { "superstruct": "^1.0.3" } : {}),
+      ...(validationLibrary === "valibot" ? { "valibot": "^0.28.0" } : {}),
+      ...(validationLibrary === "runtypes" ? { "runtypes": "^6.7.0" } : {})
     },
     devDependencies: {
       vite: "^4.0.0",

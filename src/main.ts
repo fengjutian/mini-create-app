@@ -6,17 +6,12 @@ import { generateViteReact } from "./generate_vite_react.ts";
 import { generateViteVue } from "./generate_vite_vue.ts";
 import { generateFresh } from './generate_fresh.ts'
 import { generateVueCDN } from "./generate_vue_CDN.ts";
-
-// 可选框架与运行环境
-type Framework = "react" | "vue3";
-type Runtime = "node" | "bun" | "deno"
-type PackageManager = "npm" | "pnpm" | "yarn" | "bun";
-type ValidationLibrary = "zod" | "none";
+import { type Framework, type Runtime, type PackageManager, type ValidationLibrary } from "./types.ts";
 
 const frameworks: Framework[] = ["react", "vue3"];
 const runtimes: Runtime[] = ["node", "bun", "deno"];
 const packageManagers: PackageManager[] = ["npm", "pnpm", "yarn", "bun"];
-const validationLibraries: ValidationLibrary[] = ["zod", "none"];
+const validationLibraries: ValidationLibrary[] = ["zod", "yup", "io-ts", "superstruct", "valibot", "runtypes", "none"];
 
 async function main() {
   const answers: Answers = await inquirer.prompt([

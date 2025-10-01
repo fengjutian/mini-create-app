@@ -1,7 +1,8 @@
 import fs from "fs";
 import path from "path";
+import { type ValidationLibrary } from "./types.ts";
 
-export function generateViteVue(projectPath: string, validationLibrary: "zod" | "none") {
+export function generateViteVue(projectPath: string, validationLibrary: ValidationLibrary) {
   fs.mkdirSync(path.join(projectPath, "src/components"), { recursive: true });
   fs.writeFileSync(
     path.join(projectPath, "package.json"),
@@ -17,7 +18,12 @@ export function generateViteVue(projectPath: string, validationLibrary: "zod" | 
         },
         dependencies: {
           vue: "^3.2.0",
-          ...(validationLibrary === "zod" ? { "zod": "^3.22.0" } : {})
+          ...(validationLibrary === "zod" ? { "zod": "^3.22.0" } : {}),
+          ...(validationLibrary === "yup" ? { "yup": "^1.2.0" } : {}),
+          ...(validationLibrary === "io-ts" ? { "io-ts": "^2.2.20" } : {}),
+          ...(validationLibrary === "superstruct" ? { "superstruct": "^1.0.3" } : {}),
+          ...(validationLibrary === "valibot" ? { "valibot": "^0.28.0" } : {}),
+          ...(validationLibrary === "runtypes" ? { "runtypes": "^6.7.0" } : {})
         },
         devDependencies: {
           vite: "^4.0.0",
