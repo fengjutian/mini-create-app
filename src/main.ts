@@ -8,11 +8,11 @@ import { generateFresh } from './generate_fresh.ts'
 import { generateVueCDN } from "./generate_vue_CDN.ts";
 
 // 可选框架与运行环境
-type Framework = "react" | "vue";
+type Framework = "react" | "vue3";
 type Runtime = "node" | "bun" | "deno"
 type PackageManager = "npm" | "pnpm" | "yarn" | "bun";
 
-const frameworks: Framework[] = ["react", "vue"];
+const frameworks: Framework[] = ["react", "vue3"];
 const runtimes: Runtime[] = ["node", "bun", "deno"];
 const packageManagers: PackageManager[] = ["npm", "pnpm", "yarn", "bun"];
 
@@ -85,28 +85,6 @@ async function main() {
     console.log(`  bun dev`);
   }
 }
-
-// ---------- 模板生成 ----------
-
-// function generateVueCDN(projectPath: string) {
-//   fs.mkdirSync(path.join(projectPath, "public"), { recursive: true });
-//   fs.writeFileSync(
-//     path.join(projectPath, "public/index.html"),
-//     `<!DOCTYPE html><html><head><script src="https://unpkg.com/vue@3/dist/vue.global.js"></script><script type="module" src="./HelloWorld.js"></script></head><body><div id="app"></div><script>const { createApp } = Vue; createApp({ components: { HelloWorld } }).mount('#app');</script></body></html>`
-//   );
-//   fs.writeFileSync(
-//     path.join(projectPath, "public/HelloWorld.js"),
-//     `export const HelloWorld = { props: ['msg'], template: '<h1>{{ msg }}</h1>' };`
-//   );
-//   fs.writeFileSync(
-//     path.join(projectPath, "deno.json"),
-//     JSON.stringify(
-//       { tasks: { start: "deno run --allow-net --allow-read public/index.html" } },
-//       null,
-//       2
-//     )
-//   );
-// }
 
 function generateReadme(projectPath: string, framework: Framework, runtime: Runtime, pkgManager: PackageManager) {
   const cmds = {
