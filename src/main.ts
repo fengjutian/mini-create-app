@@ -8,6 +8,7 @@ import { generateFresh } from './generate_fresh.ts'
 // import { generateVueCDN } from "./generate_vue_CDN.ts";
 import { type Framework, type Runtime, type PackageManager, type ValidationLibrary, type ErrorHandlingLibrary, type TestingLibrary, type VueStateLibrary, type ReactStateLibrary, type StateLibrary, type ReactUILibrary, type VueUILibrary, type UILibrary } from "./types.ts";
 
+// 定义所有可选配置
 const frameworks: Framework[] = ["react", "vue3"];
 const runtimes: Runtime[] = ["node", "bun", "deno"];
 const packageManagers: PackageManager[] = ["npm", "pnpm", "yarn", "bun"];
@@ -19,75 +20,180 @@ const reactStateLibraries: ReactStateLibrary[] = ["redux", "zustand", "recoil", 
 const reactUILibraries: ReactUILibrary[] = ["mui", "antd", "chakra-ui", "blueprint", "fluent-ui", "headless-ui", "radix-ui", "mantine", "nextui", "none"];
 const vueUILibraries: VueUILibrary[] = ["vuetify", "naive-ui", "element-plus", "ant-design-vue", "primevue", "vant", "quasar", "tdesign-vue-next", "none"];
 
+// 预设模板选项
+const presets = [
+  { name: "✨ 快速开始 (React + Node + Vite)", value: "react-node" },
+  { name: "✨ 快速开始 (Vue3 + Node + Vite)", value: "vue3-node" },
+  { name: "🛠️ 自定义配置", value: "custom" }
+];
+
+// 清除屏幕函数
+function clearScreen() {
+  console.log("\x1Bc");
+}
+
+// 显示欢迎信息
+function showWelcome() {
+  clearScreen();
+  console.log(`
+🎉 欢迎使用 Mini Create App 🎉
+`);
+  console.log(`这是一个现代化的应用生成工具，可以帮助你快速创建配置完善的前端项目。\n`);
+}
+
+// 显示选择总结
+function showSelectionSummary(answers: Answers) {
+  clearScreen();
+  console.log(`\n📋 项目配置总结\n`);
+  console.log(`🎨 框架: ${answers.framework}`);
+  console.log(`⚙️ 运行环境: ${answers.runtime}`);
+  console.log(`📦 包管理器: ${answers.pkgManager}`);
+  console.log(`🔍 验证库: ${answers.validationLibrary}`);
+  console.log(`🛡️ 异常处理库: ${answers.errorHandlingLibrary}`);
+  console.log(`🧪 测试库: ${answers.testingLibrary}`);
+  console.log(`📊 状态管理库: ${answers.stateLibrary}`);
+  console.log(`🎨 UI库: ${answers.uiLibrary}\n`);
+}
+
 async function main() {
-  const answers: Answers = await inquirer.prompt([
+  showWelcome();
+
+  // 步骤1: 选择预设或自定义配置
+  const presetAnswer = await inquirer.prompt([
     {
       type: "list",
-      name: "framework",
-      message: "🎨 选择框架:",
-      choices: frameworks,
-    },
-    {
-      type: "list",
-      name: "runtime",
-      message: "⚙️ 选择运行环境:",
-      choices: runtimes,
-    },
-    {
-      type: "list",
-      name: "pkgManager",
-      message: "📦 选择包管理器:",
-      choices: packageManagers,
-    },
-    {
-      type: "list",
-      name: "validationLibrary",
-      message: "🔍 选择验证库:",
-      choices: validationLibraries,
-    },
-    {
-      type: "list",
-      name: "errorHandlingLibrary",
-      message: "🛡️ 选择异常处理库:",
-      choices: errorHandlingLibraries,
-    },
-    {
-      type: "list",
-      name: "testingLibrary",
-      message: "🧪 选择测试库:",
-      choices: testingLibraries,
-    },
-    {
-      type: "list",
-      name: "stateLibrary",
-      message: "📊 选择全局状态管理库:",
-      choices: function(answers) {
-        if (answers.framework === "vue3") {
-          return vueStateLibraries;
-        } else {
-          return reactStateLibraries;
-        }
-      },
-      when: function() {
-        return true;
-      }
-    },
-    {
-      type: "list",
-      name: "uiLibrary",
-      message: "🎨 选择UI库:",
-      choices: function(answers) {
-        if (answers.framework === "vue3") {
-          return vueUILibraries;
-        } else {
-          return reactUILibraries;
-        }
-      },
-      when: function() {
-        return true;
-      }
-    },
+      name: "preset",
+      message: "请选择创建方式:",
+      choices: presets,
+      default: "custom"
+    }
   ]);
+
+  let answers: Answers = {};
+
+  if (presetAnswer.preset === "react-node") {
+    // React + Node 预设
+    answers = {
+      framework: "react",
+      runtime: "node",
+      pkgManager: "npm",
+      validationLibrary: "zod",
+      errorHandlingLibrary: "neverthrow",
+      testingLibrary: "vitest",
+      stateLibrary: "zustand",
+      uiLibrary: "none"
+    };
+  } else if (presetAnswer.preset === "vue3-node") {
+    // Vue3 + Node 预设
+    answers = {
+      framework: "vue3",
+      runtime: "node",
+      pkgManager: "npm",
+      validationLibrary: "zod",
+      errorHandlingLibrary: "neverthrow",
+      testingLibrary: "vitest",
+      stateLibrary: "pinia",
+      uiLibrary: "none"
+    };
+  } else {
+    // 步骤2: 核心配置选择
+    const coreAnswers = await inquirer.prompt([
+      {
+        type: "list",
+        name: "framework",
+        message: "🎨 选择框架:",
+        choices: frameworks,
+        default: "react"
+      },
+      {
+        type: "list",
+        name: "runtime",
+        message: "⚙️ 选择运行环境:",
+        choices: runtimes,
+        default: "node"
+      },
+      {
+        type: "list",
+        name: "pkgManager",
+        message: "📦 选择包管理器:",
+        choices: packageManagers,
+        default: "npm"
+      }
+    ]);
+
+    answers = { ...coreAnswers };
+
+    // 步骤3: 功能模块选择
+    console.log(`\n🚀 现在选择你需要的功能模块 (可选择 'none' 跳过)\n`);
+    const featureAnswers = await inquirer.prompt([
+      {
+        type: "list",
+        name: "validationLibrary",
+        message: "🔍 选择验证库:",
+        choices: validationLibraries,
+        default: "none"
+      },
+      {
+        type: "list",
+        name: "errorHandlingLibrary",
+        message: "🛡️ 选择异常处理库:",
+        choices: errorHandlingLibraries,
+        default: "none"
+      },
+      {
+        type: "list",
+        name: "testingLibrary",
+        message: "🧪 选择测试库:",
+        choices: testingLibraries,
+        default: "none"
+      },
+      {
+        type: "list",
+        name: "stateLibrary",
+        message: "📊 选择全局状态管理库:",
+        choices: function() {
+          if (answers.framework === "vue3") {
+            return vueStateLibraries;
+          } else {
+            return reactStateLibraries;
+          }
+        },
+        default: "none"
+      },
+      {
+        type: "list",
+        name: "uiLibrary",
+        message: "🎨 选择UI库:",
+        choices: function() {
+          if (answers.framework === "vue3") {
+            return vueUILibraries;
+          } else {
+            return reactUILibraries;
+          }
+        },
+        default: "none"
+      },
+    ]);
+
+    answers = { ...answers, ...featureAnswers };
+  }
+
+  // 显示选择总结并确认
+  showSelectionSummary(answers);
+  
+  const confirmAnswer = await inquirer.prompt([
+    {
+      type: "confirm",
+      name: "confirm",
+      message: "确认使用以上配置创建项目吗?",
+      default: true
+    }
+  ]);
+
+  if (!confirmAnswer.confirm) {
+    console.log("\n🛑 项目创建已取消。");
+    return;
+  }
 
   const framework = answers.framework as Framework;
   const runtime = answers.runtime as Runtime;
@@ -104,6 +210,8 @@ async function main() {
   const projectPath = path.join(process.cwd(), projectName);
   
   // 根据选择生成不同模板
+  console.log(`\n🚀 正在生成项目...\n`);
+  
   if (runtime === "node" || runtime === "bun") {
     if (framework === "react") {
       generateViteReact(projectPath, validationLibrary, errorHandlingLibrary, testingLibrary, stateLibrary as ReactStateLibrary, uiLibrary as ReactUILibrary);
