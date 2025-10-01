@@ -6,7 +6,7 @@ import { generateViteReact } from "./generate_vite_react.ts";
 import { generateViteVue } from "./generate_vite_vue.ts";
 import { generateFresh } from './generate_fresh.ts'
 // import { generateVueCDN } from "./generate_vue_CDN.ts";
-import { type Framework, type Runtime, type PackageManager, type ValidationLibrary, type ErrorHandlingLibrary, type TestingLibrary, type VueStateLibrary, type ReactStateLibrary, type StateLibrary } from "./types.ts";
+import { type Framework, type Runtime, type PackageManager, type ValidationLibrary, type ErrorHandlingLibrary, type TestingLibrary, type VueStateLibrary, type ReactStateLibrary, type StateLibrary, type ReactUILibrary, type VueUILibrary, type UILibrary } from "./types.ts";
 
 const frameworks: Framework[] = ["react", "vue3"];
 const runtimes: Runtime[] = ["node", "bun", "deno"];
@@ -16,6 +16,8 @@ const errorHandlingLibraries: ErrorHandlingLibrary[] = ["neverthrow", "ts-result
 const testingLibraries: TestingLibrary[] = ["jest", "vitest", "cypress", "playwright", "puppeteer", "react-testing-library", "none"];
 const vueStateLibraries: VueStateLibrary[] = ["pinia", "valtio", "nanostores", "mobx", "redux-toolkit-query", "none"];
 const reactStateLibraries: ReactStateLibrary[] = ["redux", "zustand", "recoil", "jotai", "mobx", "valtio", "nanostores", "redux-toolkit-query", "none"];
+const reactUILibraries: ReactUILibrary[] = ["mui", "antd", "chakra-ui", "blueprint", "fluent-ui", "headless-ui", "radix-ui", "mantine", "nextui", "none"];
+const vueUILibraries: VueUILibrary[] = ["vuetify", "naive-ui", "element-plus", "ant-design-vue", "primevue", "vant", "quasar", "tdesign-vue-next", "none"];
 
 async function main() {
   const answers: Answers = await inquirer.prompt([
@@ -70,6 +72,21 @@ async function main() {
         return true;
       }
     },
+    {
+      type: "list",
+      name: "uiLibrary",
+      message: "🎨 选择UI库:",
+      choices: function(answers) {
+        if (answers.framework === "vue3") {
+          return vueUILibraries;
+        } else {
+          return reactUILibraries;
+        }
+      },
+      when: function() {
+        return true;
+      }
+    },
   ]);
 
   const framework = answers.framework as Framework;
@@ -79,6 +96,7 @@ async function main() {
   const errorHandlingLibrary = answers.errorHandlingLibrary as ErrorHandlingLibrary;
   const testingLibrary = answers.testingLibrary as TestingLibrary;
   const stateLibrary = answers.stateLibrary as StateLibrary;
+  const uiLibrary = answers.uiLibrary as UILibrary;
 
   const projectName = `${framework}-${runtime}-app`;
   fs.mkdirSync(projectName, { recursive: true });
@@ -88,9 +106,9 @@ async function main() {
   // 根据选择生成不同模板
   if (runtime === "node" || runtime === "bun") {
     if (framework === "react") {
-      generateViteReact(projectPath, validationLibrary, errorHandlingLibrary, testingLibrary, stateLibrary as ReactStateLibrary);
+      generateViteReact(projectPath, validationLibrary, errorHandlingLibrary, testingLibrary, stateLibrary as ReactStateLibrary, uiLibrary as ReactUILibrary);
     } else {
-      generateViteVue(projectPath, validationLibrary, errorHandlingLibrary, testingLibrary, stateLibrary as VueStateLibrary);
+      generateViteVue(projectPath, validationLibrary, errorHandlingLibrary, testingLibrary, stateLibrary as VueStateLibrary, uiLibrary as VueUILibrary);
     }
   } else if (runtime === "deno") {
     if (framework === "react") {
@@ -101,7 +119,7 @@ async function main() {
   }
 
   // 生成 README
-  generateReadme(projectPath, framework, runtime, pkgManager, validationLibrary, errorHandlingLibrary, testingLibrary, stateLibrary);
+  generateReadme(projectPath, framework, runtime, pkgManager, validationLibrary, errorHandlingLibrary, testingLibrary, stateLibrary, uiLibrary);
 
   console.log(`\n✅ 项目已生成: ${projectName}`);
   console.log(`\n🚀 接下来运行:`);
@@ -124,7 +142,7 @@ async function main() {
   }
 }
 
-function generateReadme(projectPath: string, framework: Framework, runtime: Runtime, pkgManager: PackageManager, validationLibrary: ValidationLibrary, errorHandlingLibrary: ErrorHandlingLibrary, testingLibrary: TestingLibrary, stateLibrary: string) {
+function generateReadme(projectPath: string, framework: Framework, runtime: Runtime, pkgManager: PackageManager, validationLibrary: ValidationLibrary, errorHandlingLibrary: ErrorHandlingLibrary, testingLibrary: TestingLibrary, stateLibrary: string, uiLibrary: UILibrary) {
   const cmds = {
     npm: { install: "npm install", dev: "npm run dev" },
     pnpm: { install: "pnpm install", dev: "pnpm dev" },
@@ -175,6 +193,9 @@ function generateReadme(projectPath: string, framework: Framework, runtime: Runt
     }
     if (stateLibrary !== "none") {
       features.push(`📊 使用 ${stateLibrary} 进行全局状态管理`);
+    }
+    if (uiLibrary !== "none") {
+      features.push(`🎨 使用 ${uiLibrary} UI 库`);
     }
   
   fs.writeFileSync(

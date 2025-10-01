@@ -1,13 +1,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { type ValidationLibrary, type ErrorHandlingLibrary, type TestingLibrary, type VueStateLibrary } from './types.ts';
+import { type ValidationLibrary, type ErrorHandlingLibrary, type TestingLibrary, type VueStateLibrary, type VueUILibrary } from './types.ts';
 
 export function generateViteVue(
   projectPath: string,
   validationLibrary: ValidationLibrary,
   errorHandlingLibrary: ErrorHandlingLibrary,
   testingLibrary: TestingLibrary,
-  stateLibrary: VueStateLibrary
+  stateLibrary: VueStateLibrary,
+  uiLibrary: VueUILibrary
 ) {
   // 创建基础目录结构
   fs.mkdirSync(path.join(projectPath, 'src/components'), { recursive: true });
@@ -44,7 +45,15 @@ export function generateViteVue(
       ...(errorHandlingLibrary === 'oxide.ts' ? { 'oxide.ts': '^1.0.0' } : {}),
       ...(errorHandlingLibrary === 'true-myth' ? { 'true-myth': '^6.1.0' } : {}),
       ...(errorHandlingLibrary === 'purify-ts' ? { 'purify-ts': '^1.4.0' } : {}),
-      ...(errorHandlingLibrary === 'fp-ts' ? { 'fp-ts': '^2.16.0' } : {})
+      ...(errorHandlingLibrary === 'fp-ts' ? { 'fp-ts': '^2.16.0' } : {}),
+      ...(uiLibrary === 'vuetify' ? { 'vuetify': '^3.4.0' } : {}),
+      ...(uiLibrary === 'naive-ui' ? { 'naive-ui': '^2.38.0', 'vueuc': '^0.4.0' } : {}),
+      ...(uiLibrary === 'element-plus' ? { 'element-plus': '^2.4.0' } : {}),
+      ...(uiLibrary === 'ant-design-vue' ? { 'ant-design-vue': '^4.0.0' } : {}),
+      ...(uiLibrary === 'primevue' ? { 'primevue': '^3.40.0', 'primeicons': '^6.0.0' } : {}),
+      ...(uiLibrary === 'vant' ? { 'vant': '^4.8.0' } : {}),
+      ...(uiLibrary === 'quasar' ? { 'quasar': '^2.14.0' } : {}),
+      ...(uiLibrary === 'tdesign-vue-next' ? { 'tdesign-vue-next': '^1.9.0' } : {})
     },
     devDependencies: {
       vite: '^5.0.0',
@@ -720,6 +729,9 @@ const count = ref(0);
 </template>
 `
     );
+    
+    // 先创建__tests__目录
+    fs.mkdirSync(path.join(projectPath, 'src/components/__tests__'), { recursive: true });
     
     fs.writeFileSync(
       path.join(projectPath, 'src/components/__tests__/Hello.spec.ts'),

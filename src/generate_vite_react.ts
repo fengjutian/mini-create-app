@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
-import { type ValidationLibrary, type ErrorHandlingLibrary, type TestingLibrary, type ReactStateLibrary } from "./types.ts";
-export function generateViteReact(projectPath: string, validationLibrary: ValidationLibrary, errorHandlingLibrary: ErrorHandlingLibrary, testingLibrary: TestingLibrary, stateLibrary: ReactStateLibrary) {
+import { type ValidationLibrary, type ErrorHandlingLibrary, type TestingLibrary, type ReactStateLibrary, type ReactUILibrary } from "./types.ts";
+export function generateViteReact(projectPath: string, validationLibrary: ValidationLibrary, errorHandlingLibrary: ErrorHandlingLibrary, testingLibrary: TestingLibrary, stateLibrary: ReactStateLibrary, uiLibrary: ReactUILibrary) {
   // create folders
   fs.mkdirSync(path.join(projectPath, "src/components"), { recursive: true });
   fs.mkdirSync(path.join(projectPath, "src/routes"), { recursive: true });
@@ -41,7 +41,16 @@ export function generateViteReact(projectPath: string, validationLibrary: Valida
       ...(errorHandlingLibrary === "oxide.ts" ? { "oxide.ts": "^1.0.0" } : {}),
       ...(errorHandlingLibrary === "true-myth" ? { "true-myth": "^6.1.0" } : {}),
       ...(errorHandlingLibrary === "purify-ts" ? { "purify-ts": "^1.4.0" } : {}),
-      ...(errorHandlingLibrary === "fp-ts" ? { "fp-ts": "^2.16.0" } : {})
+      ...(errorHandlingLibrary === "fp-ts" ? { "fp-ts": "^2.16.0" } : {}),
+      ...(uiLibrary === "mui" ? { "@mui/material": "^5.15.0", "@emotion/react": "^11.11.0", "@emotion/styled": "^11.11.0" } : {}),
+      ...(uiLibrary === "antd" ? { "antd": "^5.12.0" } : {}),
+      ...(uiLibrary === "chakra-ui" ? { "@chakra-ui/react": "^2.8.0", "@emotion/react": "^11.11.0", "@emotion/styled": "^11.11.0", "framer-motion": "^10.16.0" } : {}),
+      ...(uiLibrary === "blueprint" ? { "@blueprintjs/core": "^5.9.0" } : {}),
+      ...(uiLibrary === "fluent-ui" ? { "@fluentui/react": "^8.110.0" } : {}),
+      ...(uiLibrary === "headless-ui" ? { "@headlessui/react": "^1.7.17" } : {}),
+      ...(uiLibrary === "radix-ui" ? { "@radix-ui/react-dialog": "^1.0.4", "@radix-ui/react-button": "^1.0.3" } : {}),
+      ...(uiLibrary === "mantine" ? { "@mantine/core": "^7.2.0", "@mantine/hooks": "^7.2.0", "@emotion/react": "^11.11.0" } : {}),
+      ...(uiLibrary === "nextui" ? { "@nextui-org/react": "^2.2.0", "framer-motion": "^10.16.0" } : {})
     },
     devDependencies: {
       vite: "^4.0.0",

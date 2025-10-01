@@ -7,3 +7,6 @@ export type TestingLibrary = "jest" | "vitest" | "cypress" | "playwright" | "pup
 export type VueStateLibrary = "pinia" | "valtio" | "nanostores" | "mobx" | "redux-toolkit-query" | "none";
 export type ReactStateLibrary = "redux" | "zustand" | "recoil" | "jotai" | "mobx" | "valtio" | "nanostores" | "redux-toolkit-query" | "none";
 export type StateLibrary = VueStateLibrary | ReactStateLibrary;
+export type ReactUILibrary = "mui" | "antd" | "chakra-ui" | "blueprint" | "fluent-ui" | "headless-ui" | "radix-ui" | "mantine" | "nextui" | "none";
+export type VueUILibrary = "vuetify" | "naive-ui" | "element-plus" | "ant-design-vue" | "primevue" | "vant" | "quasar" | "tdesign-vue-next" | "none";
+export type UILibrary = ReactUILibrary | VueUILibrary;
