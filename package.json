@@ -1,8 +1,11 @@
 {
   "name": "mini-create-app",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A mini app generator with TypeScript support",
-  "main": "main.js",
+  "main": "dist/src/main.js",
+  "bin": {
+    "mini-create-app": "cli.js"
+  },
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
