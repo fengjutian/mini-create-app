@@ -7,8 +7,6 @@ import { generateViteVue } from "./generate_vite_vue.ts";
 import { generateFresh } from './generate_fresh.ts'
 import { generateVueCDN } from "./generate_vue_CDN.ts";
 
-
-
 // 可选框架与运行环境
 type Framework = "react" | "vue";
 type Runtime = "node" | "bun" | "deno"
