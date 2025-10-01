@@ -12,13 +12,13 @@ import { type Framework, type Runtime, type PackageManager, type ValidationLibra
 const frameworks: Framework[] = ["react", "vue3"];
 const runtimes: Runtime[] = ["node", "bun", "deno"];
 const packageManagers: PackageManager[] = ["npm", "pnpm", "yarn", "bun"];
-const validationLibraries: ValidationLibrary[] = ["zod", "yup", "io-ts", "superstruct", "valibot", "runtypes", "none"];
-const errorHandlingLibraries: ErrorHandlingLibrary[] = ["neverthrow", "ts-results", "oxide.ts", "true-myth", "purify-ts", "fp-ts", "none"];
-const testingLibraries: TestingLibrary[] = ["jest", "vitest", "cypress", "playwright", "puppeteer", "react-testing-library", "none"];
-const vueStateLibraries: VueStateLibrary[] = ["pinia", "valtio", "nanostores", "mobx", "redux-toolkit-query", "none"];
-const reactStateLibraries: ReactStateLibrary[] = ["redux", "zustand", "recoil", "jotai", "mobx", "valtio", "nanostores", "redux-toolkit-query", "none"];
-const reactUILibraries: ReactUILibrary[] = ["mui", "antd", "chakra-ui", "blueprint", "fluent-ui", "headless-ui", "radix-ui", "mantine", "nextui", "none"];
-const vueUILibraries: VueUILibrary[] = ["vuetify", "naive-ui", "element-plus", "ant-design-vue", "primevue", "vant", "quasar", "tdesign-vue-next", "none"];
+const validationLibraries: ValidationLibrary[] = ["none", "zod", "yup", "io-ts", "superstruct", "valibot", "runtypes"];
+const errorHandlingLibraries: ErrorHandlingLibrary[] = ["none", "neverthrow", "ts-results", "oxide.ts", "true-myth", "purify-ts", "fp-ts"];
+const testingLibraries: TestingLibrary[] = ["none", "jest", "vitest", "cypress", "playwright", "puppeteer", "react-testing-library"];
+const vueStateLibraries: VueStateLibrary[] = ["none", "pinia", "valtio", "nanostores", "mobx", "redux-toolkit-query"];
+const reactStateLibraries: ReactStateLibrary[] = ["none", "redux", "zustand", "recoil", "jotai", "mobx", "valtio", "nanostores", "redux-toolkit-query"];
+const reactUILibraries: ReactUILibrary[] = ["none", "mui", "antd", "chakra-ui", "blueprint", "fluent-ui", "headless-ui", "radix-ui", "mantine", "nextui"];
+const vueUILibraries: VueUILibrary[] = ["none", "vuetify", "naive-ui", "element-plus", "ant-design-vue", "primevue", "vant", "quasar", "tdesign-vue-next"];
 
 // 预设模板选项
 const presets = [
